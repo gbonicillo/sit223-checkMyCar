@@ -77,7 +77,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'checkMyCar',
-        'ENFORCE_SCHEMA': False
+        'USER': 'sit223',
+        'PASSWORD': 'checkMyC@rSIT223',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 
