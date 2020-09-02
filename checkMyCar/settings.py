@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'checkMyCar.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'checkMyCar'),
+        'NAME': 'checkMyCar',
     }
 }
 
