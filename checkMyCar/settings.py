@@ -75,8 +75,9 @@ WSGI_APPLICATION = 'checkMyCar.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'checkMyCar',
+        'ENFORCE_SCHEMA': False
     }
 }
 
