@@ -1,8 +1,14 @@
 from django.db import models
 
+class Make (models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
 class Car (models.Model):
 
-    make = models.CharField(max_length=50)
+    make = models.ForeignKey(Make, on_delete=models.CASCADE)
     model = models.CharField(max_length=50)
 
     def __str__(self):

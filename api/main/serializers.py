@@ -1,8 +1,17 @@
 from rest_framework import serializers
-from .models import Car, Issue
+from .models import Make, Car, Issue
 from django.contrib.auth.models import User
 
+class MakeSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Make
+        fields = [
+            "name"
+        ]
+
 class CarSerializer (serializers.ModelSerializer):
+    make = serializers.StringRelatedField()
+
     class Meta:
         model = Car
         fields = [
