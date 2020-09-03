@@ -1,4 +1,12 @@
-from django.shortcuts import render
+from .models import Car
+from .serializers import CarSerializer
+from rest_framework import mixins
+from rest_framework import generics
 
-def index(request):
-    return render(request, "index.html")
+class CarList(generics.ListAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class CarDetail(generics.RetrieveAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
