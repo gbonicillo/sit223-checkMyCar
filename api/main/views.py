@@ -1,10 +1,11 @@
+from django.contrib.auth.models import User
 from .models import Car
-from .serializers import CarSerializer, UserSerializer
+from .serializers import CarSerializer, UserSerializer, UserCreateSerializer
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.renderers import JSONRenderer
 import json
 
@@ -26,3 +27,8 @@ class AuthUserDetail(APIView):
         }
 
         return Response(content)
+
+class AuthUserRegister(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
