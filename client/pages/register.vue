@@ -122,6 +122,9 @@ export default {
                     if (err.response.data.username) {
                         this.error = err.response.data.username;
                         $("#username")[0].setCustomValidity(this.error);
+                    } else if (err.response.data.email) {
+                        this.error = err.response.data.email;
+                        $("#email")[0].setCustomValidity(this.error);
                     }
                 });
         },

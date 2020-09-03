@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from .models import Make, Car, Issue
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+
+User = get_user_model()
 
 class MakeSerializer (serializers.ModelSerializer):
     class Meta:

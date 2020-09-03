@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import Car
 from .serializers import CarSerializer, UserSerializer, UserCreateSerializer
 from rest_framework import mixins
@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.renderers import JSONRenderer
 import json
+
+User = get_user_model()
 
 class CarList(generics.ListAPIView):
     queryset = Car.objects.all()
