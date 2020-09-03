@@ -1,12 +1,15 @@
 <template>
     <b-container>
         <b-row>
-            <b-card
+            <div
                 v-for="car in cars"
                 :key="car.id"
-                :title="car.make + ' ' + car.model"
                 class="col-lg-4 col-md-6 mb-3 mt-3"
-            />
+            >
+                <b-card
+                    :title="car.make + ' ' + car.model"
+                />
+            </div>
         </b-row>
     </b-container>
 </template>
@@ -15,7 +18,7 @@
 export default {
     async asyncData ({ $axios, params }) {
         try {
-            const cars = await $axios.$get("/cars/");
+            const cars = await $axios.$get("/api/cars/");
             return {
                 cars
             };

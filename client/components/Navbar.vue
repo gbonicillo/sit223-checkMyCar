@@ -6,10 +6,57 @@
         </b-navbar-brand>
         <b-collapse id="nav_collapse" is-nav>
             <b-navbar-nav>
-                <b-nav-item to="/">
-                    Home
+                <b-nav-item
+                    v-for="(item, key) of globalItems"
+                    :key="key"
+                    :to="item.to"
+                >
+                    {{ item.title }}
                 </b-nav-item>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item-dropdown
+                    v-if="this.$auth.loggedIn"
+                    :text="this.$auth.user.username"
+                    right
+                >
+                    <b-dropdown-item
+                        v-for="(item, key) of rightNavAuthenticatedItems"
+                        :key="key"
+                    >
+                        <b-link :to="item.to">
+                            {{ item.title }}
+                        </b-link>
+                    </b-dropdown-item>
+                </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
 </template>
+
+<script>
+export default {
+    data () {
+        return {
+            globalItems: [
+                {
+                    title: "Home",
+                    to: {
+                        name: "index"
+                    }
+                }
+            ],
+            authenticatedItems: [],
+            rightNavAuthenticatedItems: [
+                {
+                    title: "Logout",
+                    to: {
+                        name: "logout"
+                    }
+                }
+            ]
+        };
+    }
+};
+</script>

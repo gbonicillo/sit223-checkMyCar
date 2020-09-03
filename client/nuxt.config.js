@@ -55,19 +55,75 @@ export default {
     // Doc: https://bootstrap-vue.js.org
         "bootstrap-vue/nuxt",
         // Doc: https://axios.nuxtjs.org/usage
-        "@nuxtjs/axios"
+        "@nuxtjs/axios",
+        "@nuxtjs/auth",
+        "@nuxtjs/toast"
     ],
     /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
     axios: {
-        baseURL: "http://localhost:8000/api"
+        baseURL: "http://localhost:8000/"
     },
     /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
     build: {
+    },
+
+    auth: {
+        strategies: {
+            local: {
+                endpoints: {
+                    login: {
+                        url: "/api/token/",
+                        method: "post",
+                        propertyName: "access",
+                        altProperty: "refresh"
+                    },
+                    logout: true,
+                    user: {
+                        url: "/api/auth/user",
+                        method: "get",
+                        propertyName: "user"
+                    }
+                }
+            }
+        },
+        redirect: {
+            login: "/login"
+        }
+    },
+    router: {
+        middleware: [
+            "auth"
+        ]
+    },
+    toast: {
+        position: "top-center",
+        iconPack: "fontawesome",
+        duration: 3000,
+        register: [
+            {
+                name: "defaultSuccess",
+                message: payload =>
+                    !payload.msg ? "Operation Success" : payload.msg,
+                options: {
+                    type: "success",
+                    icon: "check"
+                }
+            },
+            {
+                name: "defaultError",
+                message: payload =>
+                    !payload.msg ? "Oops... Something went wrong" : payload.msg,
+                options: {
+                    type: "error",
+                    icon: "times"
+                }
+            }
+        ]
     }
 };
