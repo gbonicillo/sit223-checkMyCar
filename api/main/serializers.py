@@ -16,9 +16,18 @@ class CarSerializer (serializers.ModelSerializer):
             "make",
             "model"
         ]
+    
+class CarMakeDetailSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Car
+        fields = [
+            "id",
+            "model"
+        ]
 
 class MakeSerializer (serializers.ModelSerializer):
-    cars = serializers.StringRelatedField(many=True)
+    # cars = serializers.StringRelatedField(many=True)
+    cars = CarMakeDetailSerializer(many=True)
 
     class Meta:
         ordering = ["name"]
@@ -33,6 +42,7 @@ class MakeListSerializer (serializers.ModelSerializer):
         ordering = ["name"]
         model = Make
         fields = [
+            "id",
             "name"
         ]
 
