@@ -8,7 +8,7 @@ class Make (models.Model):
 
 class Car (models.Model):
 
-    make = models.ForeignKey(Make, on_delete=models.CASCADE)
+    make = models.ForeignKey(Make, related_name="cars", on_delete=models.CASCADE)
     model = models.CharField(max_length=50)
 
     def __str__(self):
