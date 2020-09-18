@@ -1,14 +1,30 @@
 <template>
     <div>
-        <page-header page-title="Cars" />
-        <b-table
-            striped
-            hover
-            selectable
-            :fields="fields"
-            :items="cars"
-            @row-clicked="onRowClick"
-        />
+        <b-row align-v="center">
+            <b-col col="8">
+                <page-header page-title="Cars" />
+            </b-col>
+            <b-col col="4">
+                <b-button
+                    v-if="$auth.user.is_staff"
+                    variant="primary"
+                    class="float-right"
+                    to="/cars/add"
+                >
+                    Add Car
+                </b-button>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-table
+                striped
+                hover
+                selectable
+                :fields="fields"
+                :items="cars"
+                @row-clicked="onRowClick"
+            />
+        </b-row>
     </div>
 </template>
 

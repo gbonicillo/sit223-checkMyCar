@@ -1,6 +1,20 @@
 <template>
     <div>
-        <page-header page-title="Makes" />
+        <b-row align-v="center">
+            <b-col col="8">
+                <page-header page-title="Makes" />
+            </b-col>
+            <b-col col="4">
+                <b-button
+                    v-if="$auth.user.is_staff"
+                    variant="primary"
+                    class="float-right"
+                    to="/makes/add"
+                >
+                    Add Make
+                </b-button>
+            </b-col>
+        </b-row>
         <b-table
             striped
             hover
