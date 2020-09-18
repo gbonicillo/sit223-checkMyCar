@@ -7,7 +7,7 @@
         <b-collapse id="nav_collapse" is-nav>
             <b-navbar-nav>
                 <b-nav-item
-                    v-for="(item, key) of globalItems"
+                    v-for="(item, key) of this.$auth.loggedIn ? authenticatedItems : globalItems"
                     :key="key"
                     :to="item.to"
                 >
@@ -47,7 +47,32 @@ export default {
                     }
                 }
             ],
-            authenticatedItems: [],
+            authenticatedItems: [
+                {
+                    title: "Home",
+                    to: {
+                        name: "index"
+                    }
+                },
+                {
+                    title: "Makes",
+                    to: {
+                        name: "makes"
+                    }
+                },
+                {
+                    title: "Cars",
+                    to: {
+                        name: "cars"
+                    }
+                },
+                {
+                    title: "Reports",
+                    to: {
+                        name: "reports"
+                    }
+                }
+            ],
             rightNavAuthenticatedItems: [
                 {
                     title: "Logout",
