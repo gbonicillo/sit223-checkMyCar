@@ -10,6 +10,9 @@ urlpatterns = [
     path("cars/", views.CarList.as_view()),
     path("cars/<int:pk>", views.CarDetail.as_view()),
     path("cars/create", views.CarCreate.as_view()),
+    path("reports/", views.IssueList.as_view()),
+    path("reports/<int:pk>", views.IssueDetail.as_view()),
+    path("reports/create", views.IssueCreate.as_view()),
     path("auth/user", views.AuthUserDetail.as_view()),
     path("auth/register", views.AuthUserRegister.as_view())
 ]
