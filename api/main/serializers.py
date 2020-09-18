@@ -1,13 +1,19 @@
 from rest_framework import serializers
 from .models import Make, Car, Issue
+from api.settings import EMAIL_HOST_USER
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+from textwrap import dedent
 
 User = get_user_model()
 
 
 class IssueSerializer (serializers.ModelSerializer):
     car = serializers.StringRelatedField()
+    type = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Issue
@@ -15,9 +21,14 @@ class IssueSerializer (serializers.ModelSerializer):
             "id",
             "car",
             "title",
-            "type"
+            "description",
+            "type",
+            "created_at",
+            "updated_at"
         ]
-
+    
+    def get_type(self, obj):
+        return obj.get_type_display()
 
 class CarSerializer (serializers.ModelSerializer):
     make = serializers.StringRelatedField()
@@ -67,10 +78,35 @@ class CarMakeDetailSerializer (serializers.ModelSerializer):
             "model"
         ]
 
+class IssueCreateSerializer (serializers.ModelSerializer):
+    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
+    type = serializers.ChoiceField(choices=Issue.ISSUE_TYPE_CHOICES)
 
-class MakeSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = [
+            "id",
+            "car",
+            "title",
+            "description",
+            "type"
+        ]
+    
+    def create(self, validated_data):
+        car = Car.objects.get(pk=validated_data["car"].id)
+        recipient_list = [owner.email for owner in car.owners.all()]
+        report_type = "Issue" if validated_data["type"] == "IS" else "Recall" 
+
+        subject = f"There's a new {report_type} regarding your car {car}"
+        message = f"Title: {validated_data['title']}\n\nDescription:\n{validated_data['description']}"
+
+        send_mail(subject, message, EMAIL_HOST_USER, recipient_list,fail_silently = False)
+
+        return Issue.objects.create(**validated_data)
+
+class MakeSerializer (serializers.ModelSerializer): 
     cars = CarMakeDetailSerializer(many=True)
-
+   
     class Meta:
         ordering = ["name"]
         model = Make
