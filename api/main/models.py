@@ -23,7 +23,7 @@ class Issue (models.Model):
         (ISSUE, "issue")
     ]
 
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, related_name="reports", on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     type = models.CharField(
         max_length=2,

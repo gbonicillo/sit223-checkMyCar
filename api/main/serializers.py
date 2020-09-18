@@ -6,8 +6,49 @@ from django.contrib.auth.hashers import make_password
 User = get_user_model()
 
 
+class IssueSerializer (serializers.ModelSerializer):
+    car = serializers.StringRelatedField()
+
+    class Meta:
+        model = Issue
+        fields = [
+            "id",
+            "car",
+            "title",
+            "type"
+        ]
+
+
 class CarSerializer (serializers.ModelSerializer):
     make = serializers.StringRelatedField()
+    reports = IssueSerializer(many=True)
+
+    class Meta:
+        model = Car
+        fields = [
+            "id",
+            "make",
+            "model",
+            "reports"
+        ]
+
+class CarListSerializer (serializers.ModelSerializer):
+    make = serializers.StringRelatedField()
+
+    class Meta:
+        ordering = [
+            "make",
+            "model"
+        ]
+        model = Car
+        fields = [
+            "id",
+            "make",
+            "model"
+        ]
+
+class CarCreateSerializer (serializers.ModelSerializer):
+    make = serializers.PrimaryKeyRelatedField(queryset=Make.objects.all())
 
     class Meta:
         model = Car
@@ -16,17 +57,18 @@ class CarSerializer (serializers.ModelSerializer):
             "make",
             "model"
         ]
-    
+
 class CarMakeDetailSerializer (serializers.ModelSerializer):
     class Meta:
+        ordering = ["model"]
         model = Car
         fields = [
             "id",
             "model"
         ]
 
+
 class MakeSerializer (serializers.ModelSerializer):
-    # cars = serializers.StringRelatedField(many=True)
     cars = CarMakeDetailSerializer(many=True)
 
     class Meta:
@@ -45,21 +87,6 @@ class MakeListSerializer (serializers.ModelSerializer):
             "id",
             "name"
         ]
-
-
-
-
-class IssueSerializer (serializers.ModelSerializer):
-    car = serializers.StringRelatedField()
-
-    class Meta:
-        model = Issue
-        fields = [
-            "car",
-            "title",
-            "type"
-        ]
-
 
 class UserSerializer (serializers.ModelSerializer):
     class Meta:
