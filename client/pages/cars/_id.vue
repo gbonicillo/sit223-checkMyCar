@@ -1,11 +1,14 @@
 <template>
     <div>
         <page-header :page-title="car.make + ' ' + car.model" />
+        <h2>Reports</h2>
         <b-table
             v-if="car.reports.length > 0"
             striped
             hover
             selectable
+            responsive
+            :fields="report_fields"
             :items="car.reports"
             @row-clicked="onRowClick"
         />
@@ -49,15 +52,35 @@ export default {
                 model: "",
                 reports: []
 
-            }
+            },
+            report_fields: [
+                {
+                    key: "type",
+                    sortable: true
+                },
+                {
+                    key: "title",
+                    sortable: true
+                },
+                {
+                    key: "created_at",
+                    label: "Date Reported",
+                    sortable: true
+                },
+                {
+                    key: "updated_at",
+                    label: "Last Updated",
+                    sortable: true
+                }
+            ]
         };
     },
     methods: {
         onRowClick (record, index) {
-            const carId = this.car.cars[index].id;
+            const reportId = this.car.reports[index].id;
 
             this.$router.push({
-                path: `/cars/${carId}`
+                path: `/reports/${reportId}`
             });
         }
     }

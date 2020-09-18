@@ -18,6 +18,14 @@
             :required="required ? true : false"
             :options="options"
         />
+        <b-form-textarea
+            v-if="formType === 'textarea'"
+            :id="id"
+            v-model="dataModel"
+            :type="type"
+            :required="required ? true : false"
+            :placeholder="placeholder"
+        />
     </b-form-group>
 </template>
 
