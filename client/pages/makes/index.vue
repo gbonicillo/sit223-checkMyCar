@@ -1,10 +1,10 @@
 <template>
     <div>
         <b-row align-v="center">
-            <b-col col="8">
+            <b-col cols="8">
                 <page-header page-title="Makes" />
             </b-col>
-            <b-col col="4">
+            <b-col cols="4">
                 <b-button
                     v-if="$auth.user.is_staff"
                     variant="primary"
@@ -19,6 +19,7 @@
             striped
             hover
             selectable
+            responsive
             :fields="fields"
             :items="makes"
             @row-clicked="onRowClick"
