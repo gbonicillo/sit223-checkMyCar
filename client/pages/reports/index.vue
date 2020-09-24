@@ -20,6 +20,7 @@
             hover
             selectable
             responsive
+            borderless
             :fields="fields"
             :items="reports"
             @row-clicked="onRowClick"

@@ -51,4 +51,9 @@ body {
     text-decoration: none;
     background-color: #f2e5bc;
 }
+
+.form-control, .custom-select {
+    border-color: var(--dark);
+}
+
 </style>

@@ -21,6 +21,7 @@
                 hover
                 selectable
                 responsive
+                borderless
                 :fields="fields"
                 :items="cars"
                 @row-clicked="onRowClick"
