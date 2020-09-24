@@ -1,4 +1,3 @@
-/* eslint-disable vue/html-indent */
 <template>
     <b-card id="registerCard">
         <b-card-title>

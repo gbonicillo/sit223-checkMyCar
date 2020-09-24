@@ -75,6 +75,26 @@ export default {
             ],
             rightNavAuthenticatedItems: [
                 {
+                    title: "Profile",
+                    to: {
+                        name: "user"
+                    }
+                },
+                {
+                    title: "Update Info",
+                    to: {
+                        name: "user-update",
+                        path: "/user/update"
+                    }
+                },
+                {
+                    title: "Change Password",
+                    to: {
+                        name: "user-change-password",
+                        path: "/user/change-password"
+                    }
+                },
+                {
                     title: "Logout",
                     to: {
                         name: "logout"
