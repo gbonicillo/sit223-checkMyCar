@@ -14,6 +14,8 @@ urlpatterns = [
     path("reports/<int:pk>", views.IssueDetail.as_view()),
     path("reports/create", views.IssueCreate.as_view()),
     path("auth/user", views.AuthUserDetail.as_view()),
+    path("auth/user/update/<int:pk>", views.AuthUserUpdate.as_view()),
+    path("auth/user/change-password/<int:pk>", views.AuthUserUpdatePassword.as_view()),
     path("auth/register", views.AuthUserRegister.as_view())
 ]
 

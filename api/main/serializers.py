@@ -1,3 +1,4 @@
+from django.http import HttpResponseBadRequest
 from rest_framework import serializers
 from .models import Make, Car, Issue
 from api.settings import EMAIL_HOST_USER
@@ -17,6 +18,9 @@ class IssueSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = Issue
+        ordering = [
+            "updated_at"
+        ]
         fields = [
             "id",
             "car",
@@ -47,10 +51,6 @@ class CarListSerializer (serializers.ModelSerializer):
     make = serializers.StringRelatedField()
 
     class Meta:
-        ordering = [
-            "make",
-            "model"
-        ]
         model = Car
         fields = [
             "id",
@@ -71,7 +71,6 @@ class CarCreateSerializer (serializers.ModelSerializer):
 
 class CarMakeDetailSerializer (serializers.ModelSerializer):
     class Meta:
-        ordering = ["model"]
         model = Car
         fields = [
             "id",
@@ -152,7 +151,35 @@ class UserCreateSerializer (serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-        password = make_password(validated_data.pop('password'))
+        password = make_password(validated_data.pop("password"))
         user = User(password=password, **validated_data)
         user.save()
         return user
+    
+class UserUpdateSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name"
+        ]
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get("email", instance.email)
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.save()
+        return instance
+
+class UserPasswordSerializer (serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "old_password",
+            "new_password"
+        ]

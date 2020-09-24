@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from .models import Car, Make
 from .serializers import * 
+from .permissions import *
 from rest_framework import mixins
+from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,7 +21,7 @@ class MakeCreate(generics.CreateAPIView):
 
 
 class MakeList(generics.ListAPIView):
-    queryset = Make.objects.all()
+    queryset = Make.objects.all().order_by('name')
     serializer_class = MakeListSerializer
 
 class MakeDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -32,7 +34,7 @@ class CarCreate(generics.CreateAPIView):
     serializer_class = CarCreateSerializer
 
 class CarList(generics.ListAPIView):
-    queryset = Car.objects.all()
+    queryset = Car.objects.all().order_by("model", "make")
     serializer_class = CarListSerializer
 
 
@@ -46,7 +48,7 @@ class IssueCreate(generics.CreateAPIView):
     serializer_class = IssueCreateSerializer
 
 class IssueList(generics.ListAPIView):
-    queryset = Issue.objects.all()
+    queryset = Issue.objects.all().order_by("-created_at")
     serializer_class = IssueSerializer
 
 class IssueDetail(generics.RetrieveAPIView):
@@ -69,3 +71,39 @@ class AuthUserRegister(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
+
+class AuthUserUpdate(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated, IsProfileOwnerOrReadOnly]
+
+class AuthUserUpdatePassword(generics.UpdateAPIView):
+    model = User
+    serializer_class = UserPasswordSerializer
+    permission_classes = [IsAuthenticated, IsProfileOwnerOrReadOnly]
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+    
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
