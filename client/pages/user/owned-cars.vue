@@ -32,6 +32,7 @@ export default {
             return { cars: [] };
         }
     },
+    middleware: "auth",
     data () {
         return {
             fields: [
