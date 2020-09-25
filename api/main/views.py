@@ -59,7 +59,7 @@ class IssueList(generics.ListAPIView):
     queryset = Issue.objects.all().order_by("-created_at")
     serializer_class = IssueSerializer
 
-class IssueDetail(generics.RetrieveDetailAPIView):
+class IssueDetail(generics.RetrieveDestroyAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
