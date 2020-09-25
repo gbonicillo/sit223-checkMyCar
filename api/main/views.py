@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.http import Http404
 from .models import Car, Make
 from .serializers import * 
 from .permissions import *
@@ -52,6 +53,67 @@ class CarUpdate(generics.RetrieveUpdateAPIView):
     queryset = Car.objects.all()
     serializer_class = CarCreateSerializer
 
+class CarOwner(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Car.objects.get(pk=pk)
+        except Car.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        car = self.get_object(pk)
+        content = {
+            "is_owner": False
+        }
+        
+        try:
+            user = car.owners.get(pk=request.user.id)
+            content = {
+                "is_owner": True
+            }
+        except User.DoesNotExist:
+            content = {
+                "is_owner": False
+            }
+
+        return Response(content)
+    
+    def put(self, request, pk, format=None):
+        car = self.get_object(pk)
+        car.owners.add(request.user.id)
+        content = CarSerializer(car).data
+
+        return Response(content)
+
+    def delete(self,request, pk, format=None):
+        car = self.get_object(pk)
+        car.owners.remove(request.user.id)
+        content = CarSerializer(car).data
+
+        return Response(content)
+
+class UserOwnedCars(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Http404
+    
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk)
+        cars = Car.objects.filter(owners__id=pk)
+        car_data = [ CarListSerializer(car).data for car in cars ]
+        content = {
+            "cars": car_data
+        }
+
+        return Response(content)
+
+
 class IssueCreate(generics.CreateAPIView):
     permission_classes = [IsAdminUser]
     queryset = Issue.objects.all()
@@ -80,7 +142,6 @@ class AuthUserDetail(APIView):
         }
 
         return Response(content)
-
 
 class AuthUserRegister(generics.CreateAPIView):
     queryset = User.objects.all()
