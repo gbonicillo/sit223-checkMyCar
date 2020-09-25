@@ -43,7 +43,7 @@ export default {
                 .then((response) => {
                     if (response.data.id) {
                         this.$router.push({
-                            path: `/cars/${response.data.id}`
+                            path: `/makes/${response.data.id}`
                         });
                     }
                 })
