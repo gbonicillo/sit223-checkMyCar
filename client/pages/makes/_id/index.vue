@@ -1,5 +1,15 @@
 <template>
     <general-contents-container :page-title="make.name">
+        <template v-slot:header-extra>
+            <b-button
+                v-if="$auth.user.is_staff"
+                variant="primary"
+                class="float-right"
+                :to="`/makes/${make.id}/update`"
+            >
+                Update
+            </b-button>
+        </template>
         <h2>Models</h2>
         <b-table
             striped
@@ -19,20 +29,14 @@ export default {
     components: {
         GeneralContentsContainer
     },
-    async asyncData ({ $axios, params }) {
+    async asyncData ({ $axios, params, error }) {
         try {
             const make = await $axios.$get(`/api/makes/${params.id}`);
             return {
                 make
             };
         } catch (err) {
-            return {
-                make: {
-                    id: 0,
-                    name: "",
-                    cars: []
-                }
-            };
+            error({ statusCode: 404, message: "Make not found" });
         }
     },
     data () {
