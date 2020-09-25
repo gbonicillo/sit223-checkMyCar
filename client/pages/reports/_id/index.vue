@@ -1,5 +1,16 @@
 <template>
     <general-contents-container :page-title="'(' + report.type + ') ' + report.car + ': ' + report.title">
+        <template v-slot:header-extra>
+            <b-button
+                v-if="$auth.user.is_staff"
+                variant="primary"
+                class="float-right"
+                :to="`/reports/${report.id}/update`"
+            >
+                Update
+            </b-button>
+        </template>
+
         <p class="text-muted">
             <em>Created: </em> {{ report.created_at }} ||
             <em>Last Updated: </em> {{ report.updated_at }} <br>
@@ -18,22 +29,14 @@ export default {
     components: {
         GeneralContentsContainer
     },
-    async asyncData ({ $axios, params }) {
+    async asyncData ({ $axios, params, error }) {
         try {
             const report = await $axios.$get(`/api/reports/${params.id}`);
             return {
                 report
             };
         } catch (err) {
-            return {
-                report: {
-                    id: 0,
-                    car: "",
-                    title: "",
-                    description: "",
-                    type: ""
-                }
-            };
+            error({ statusCode: 404, message: "Report not found" });
         }
     },
     data () {

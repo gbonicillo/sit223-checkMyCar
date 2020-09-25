@@ -17,6 +17,7 @@
             hover
             selectable
             responsive
+            borderless
             :fields="report_fields"
             :items="car.reports"
             @row-clicked="onRowClick"

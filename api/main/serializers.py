@@ -107,6 +107,31 @@ class IssueCreateSerializer (serializers.ModelSerializer):
         send_mail(subject, message, EMAIL_HOST_USER, recipient_list,fail_silently = False)
 
         return Issue.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        car = Car.objects.get(pk=validated_data["car"].id)
+
+        if (car.id != instance.car.id):
+            recipient_list = [owner.email for owner in instance.car.owners.all()]
+            report_type = "Issue" if instance.type == "IS" else "Recall" 
+            subject = f"Oops! We made a mistake, the {report_type} regarding your car {instance.car} was not for your car";
+            message = f"It was for {car}, our sincerest apologies"
+
+            send_mail(subject, message, EMAIL_HOST_USER, recipient_list,fail_silently = False)
+
+            recipient_list = [owner.email for owner in car.owners.all()]
+            report_type = "Issue" if validated_data["type"] == "IS" else "Recall" 
+
+            subject = f"There's a new {report_type} regarding your car {car}"
+            message = f"Title: {validated_data['title']}\n\nDescription:\n{validated_data['description']}"
+
+            send_mail(subject, message, EMAIL_HOST_USER, recipient_list,fail_silently = False)
+        
+        instance.car = validated_data.get("car", instance.car)
+        instance.title = validated_data.get("title", instance.title)
+        instance.description = validated_data.get("description", instance.description)
+        instance.type = validated_data.get("type", instance.type)
+        return instance
 
 class MakeSerializer (serializers.ModelSerializer): 
     cars = CarMakeDetailSerializer(many=True)

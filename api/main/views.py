@@ -63,6 +63,10 @@ class IssueDetail(generics.RetrieveAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
+class IssueUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Issue.objects.all()
+    serializer_class = IssueCreateSerializer
+
 class AuthUserDetail(APIView):
     permission_classes = [IsAuthenticated]
 

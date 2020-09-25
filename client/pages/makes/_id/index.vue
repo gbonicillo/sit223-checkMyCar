@@ -15,6 +15,7 @@
             striped
             hover
             selectable
+            borderless
             :fields="fields"
             :items="make.cars"
             @row-clicked="onRowClick"
