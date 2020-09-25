@@ -1,5 +1,15 @@
 <template>
     <general-contents-container :page-title="car.make + ' ' + car.model">
+        <template v-slot:header-extra>
+            <b-button
+                v-if="$auth.user.is_staff"
+                variant="primary"
+                class="float-right"
+                :to="`/cars/${car.id}/update`"
+            >
+                Update
+            </b-button>
+        </template>
         <h2>Reports</h2>
         <b-table
             v-if="car.reports.length > 0"
@@ -27,21 +37,14 @@ export default {
     components: {
         GeneralContentsContainer
     },
-    async asyncData ({ $axios, params }) {
+    async asyncData ({ $axios, params, error }) {
         try {
             const car = await $axios.$get(`/api/cars/${params.id}`);
             return {
                 car
             };
         } catch (err) {
-            return {
-                car: {
-                    id: 0,
-                    make: "",
-                    model: "",
-                    reports: []
-                }
-            };
+            error({ statusCode: 404, message: "Car not found" });
         }
     },
     data () {
