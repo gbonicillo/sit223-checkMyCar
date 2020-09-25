@@ -28,6 +28,10 @@ class MakeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Make.objects.all()
     serializer_class = MakeSerializer
 
+class MakeUpdate(generics.UpdateAPIView):
+    queryset = Make.objects.all()
+    serializer_class = MakeListSerializer
+
 class CarCreate(generics.CreateAPIView):
     permission_classes = [IsAdminUser]
     queryset = Car.objects.all()
@@ -41,6 +45,10 @@ class CarList(generics.ListAPIView):
 class CarDetail(generics.RetrieveAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+
+class CarUpdate(generics.UpdateAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarCreateSerializer
 
 class IssueCreate(generics.CreateAPIView):
     permission_classes = [IsAdminUser]

@@ -69,6 +69,11 @@ class CarCreateSerializer (serializers.ModelSerializer):
             "model"
         ]
 
+        def update(self, instance, validated_data):
+            instance.make = validated_data.get("make", instance.make)
+            instance.model = validated_data.get("model", instance.model)
+            return instance
+
 class CarMakeDetailSerializer (serializers.ModelSerializer):
     class Meta:
         model = Car
@@ -122,6 +127,10 @@ class MakeListSerializer (serializers.ModelSerializer):
             "id",
             "name"
         ]
+
+        def update(self, instance, validated_data):
+            instance.name = validated_data.get("name", instance.name)
+            return instance
 
 class UserSerializer (serializers.ModelSerializer):
     class Meta:
