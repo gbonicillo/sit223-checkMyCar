@@ -59,6 +59,10 @@ export default {
         options: {
             type: Array,
             default: () => []
+        },
+        value: {
+            type: [Number, String],
+            default: null
         }
     },
     computed: {
