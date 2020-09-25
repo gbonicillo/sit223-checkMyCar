@@ -24,7 +24,7 @@ class MakeList(generics.ListAPIView):
     queryset = Make.objects.all().order_by('name')
     serializer_class = MakeListSerializer
 
-class MakeDetail(generics.RetrieveUpdateDestroyAPIView):
+class MakeDetail(generics.RetrieveDestroyAPIView):
     queryset = Make.objects.all()
     serializer_class = MakeSerializer
 
@@ -42,7 +42,7 @@ class CarList(generics.ListAPIView):
     serializer_class = CarListSerializer
 
 
-class CarDetail(generics.RetrieveAPIView):
+class CarDetail(generics.RetrieveDestroyAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
@@ -59,7 +59,7 @@ class IssueList(generics.ListAPIView):
     queryset = Issue.objects.all().order_by("-created_at")
     serializer_class = IssueSerializer
 
-class IssueDetail(generics.RetrieveAPIView):
+class IssueDetail(generics.RetrieveDetailAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
