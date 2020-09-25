@@ -5,6 +5,22 @@
                 :update-to="`/cars/${car.id}/update`"
                 :delete-function="onDeleteClick"
             />
+            <b-row align-h="center">
+                <b-button
+                    v-if="isOwner"
+                    variant="danger"
+                    @click="onRemoveCarClick"
+                >
+                    Remove from my Cars
+                </b-button>
+                <b-button
+                    v-else
+                    variant="primary"
+                    @click="onAddCarClick"
+                >
+                    Add to my Cars
+                </b-button>
+            </b-row>
         </template>
         <h2>Reports</h2>
         <b-table
@@ -39,8 +55,10 @@ export default {
     async asyncData ({ $axios, params, error }) {
         try {
             const car = await $axios.$get(`/api/cars/${params.id}`);
+            const isOwner = await $axios.$get(`/api/cars/${params.id}/owner`);
             return {
-                car
+                car,
+                isOwner: isOwner.is_owner
             };
         } catch (err) {
             error({ statusCode: 404, message: "Car not found" });
@@ -94,6 +112,38 @@ export default {
                         this.$router.push({
                             path: "/cars/"
                         });
+                    })
+                    .catch((err) => {
+                        this.$toasted.global.defaultError({
+                            msg: err
+                        });
+                    });
+            }
+        },
+        async onAddCarClick (evt) {
+            const carName = this.car.make + " " + this.car.model;
+            const result = confirm(`Add ${carName} to cars you own?`);
+
+            if (result) {
+                await this.$axios.put(`/api/cars/${this.car.id}/owner`)
+                    .then((response) => {
+                        window.location.reload(true);
+                    })
+                    .catch((err) => {
+                        this.$toasted.global.defaultError({
+                            msg: err
+                        });
+                    });
+            }
+        },
+        async onRemoveCarClick (evt) {
+            const carName = this.car.make + " " + this.car.model;
+            const result = confirm(`Remove ${carName} from cars you own?`);
+
+            if (result) {
+                await this.$axios.delete(`/api/cars/${this.car.id}/owner`)
+                    .then((response) => {
+                        window.location.reload(true);
                     })
                     .catch((err) => {
                         this.$toasted.global.defaultError({

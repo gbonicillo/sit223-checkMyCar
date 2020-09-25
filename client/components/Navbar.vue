@@ -81,6 +81,13 @@ export default {
                     }
                 },
                 {
+                    title: "Owned Cars",
+                    to: {
+                        name: "user-owned-cars",
+                        path: "/user/owned-cars"
+                    }
+                },
+                {
                     title: "Update Info",
                     to: {
                         name: "user-update",
