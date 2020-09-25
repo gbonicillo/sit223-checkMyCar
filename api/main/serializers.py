@@ -115,6 +115,7 @@ class MakeSerializer (serializers.ModelSerializer):
         ordering = ["name"]
         model = Make
         fields = [
+            "id",
             "name",
             "cars"
         ]
