@@ -1,14 +1,10 @@
 <template>
     <general-contents-container :page-title="make.name">
         <template v-slot:header-extra>
-            <b-button
-                v-if="$auth.user.is_staff"
-                variant="primary"
-                class="float-right"
-                :to="`/makes/${make.id}/update`"
-            >
-                Update
-            </b-button>
+            <add-delete-buttons
+                :update-to="`/makes/${make.id}/update`"
+                :delete-function="onDeleteClick"
+            />
         </template>
         <h2>Models</h2>
         <b-table
@@ -57,6 +53,22 @@ export default {
             this.$router.push({
                 path: `/cars/${carId}`
             });
+        },
+        async onDeleteClick (evt) {
+            const result = confirm(`Are you sure you want to delete ${this.make.name}`);
+            if (result) {
+                await this.$axios.delete(`/api/makes/${this.make.id}`)
+                    .then((response) => {
+                        this.$router.push({
+                            path: "/makes/"
+                        });
+                    })
+                    .catch((err) => {
+                        this.$toasted.global.defaultError({
+                            msg: err
+                        });
+                    });
+            }
         }
     }
 };

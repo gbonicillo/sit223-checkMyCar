@@ -1,14 +1,10 @@
 <template>
     <general-contents-container :page-title="car.make + ' ' + car.model">
         <template v-slot:header-extra>
-            <b-button
-                v-if="$auth.user.is_staff"
-                variant="primary"
-                class="float-right"
-                :to="`/cars/${car.id}/update`"
-            >
-                Update
-            </b-button>
+            <add-delete-buttons
+                :update-to="`/cars/${car.id}/update`"
+                :delete-function="onDeleteClick"
+            />
         </template>
         <h2>Reports</h2>
         <b-table
@@ -33,10 +29,12 @@
 
 <script>
 import GeneralContentsContainer from "@/components/GeneralContentsContainer";
+import AddDeleteButtons from "@/components/AddDeleteButtons";
 
 export default {
     components: {
-        GeneralContentsContainer
+        GeneralContentsContainer,
+        AddDeleteButtons
     },
     async asyncData ({ $axios, params, error }) {
         try {
@@ -86,6 +84,23 @@ export default {
             this.$router.push({
                 path: `/reports/${reportId}`
             });
+        },
+        async onDeleteClick (evt) {
+            const carName = this.car.make + " " + this.car.model;
+            const result = confirm(`Are you sure you want to delete ${carName}`);
+            if (result) {
+                await this.$axios.delete(`/api/cars/${this.car.id}`)
+                    .then((response) => {
+                        this.$router.push({
+                            path: "/cars/"
+                        });
+                    })
+                    .catch((err) => {
+                        this.$toasted.global.defaultError({
+                            msg: err
+                        });
+                    });
+            }
         }
     }
 };

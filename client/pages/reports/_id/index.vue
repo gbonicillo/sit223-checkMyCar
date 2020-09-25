@@ -1,14 +1,10 @@
 <template>
     <general-contents-container :page-title="'(' + report.type + ') ' + report.car + ': ' + report.title">
         <template v-slot:header-extra>
-            <b-button
-                v-if="$auth.user.is_staff"
-                variant="primary"
-                class="float-right"
-                :to="`/reports/${report.id}/update`"
-            >
-                Update
-            </b-button>
+            <add-delete-buttons
+                :update-to="`/reports/${report.id}/update`"
+                :delete-function="onDeleteClick"
+            />
         </template>
 
         <p class="text-muted">
@@ -57,6 +53,22 @@ export default {
             this.$router.push({
                 path: `/cars/${carId}`
             });
+        },
+        async onDeleteClick (evt) {
+            const result = confirm(`Are you sure you want to delete this report?`);
+            if (result) {
+                await this.$axios.delete(`/api/reports/${this.report.id}`)
+                    .then((response) => {
+                        this.$router.push({
+                            path: "/reports/"
+                        });
+                    })
+                    .catch((err) => {
+                        this.$toasted.global.defaultError({
+                            msg: err
+                        });
+                    });
+            }
         }
     }
 };
