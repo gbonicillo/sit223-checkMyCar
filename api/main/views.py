@@ -46,7 +46,7 @@ class CarDetail(generics.RetrieveAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
-class CarUpdate(generics.UpdateAPIView):
+class CarUpdate(generics.RetrieveUpdateAPIView):
     queryset = Car.objects.all()
     serializer_class = CarCreateSerializer
 
