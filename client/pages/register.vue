@@ -1,81 +1,76 @@
 <template>
-    <b-card id="registerCard">
-        <b-card-title>
-            <page-header page-title="Register" />
-        </b-card-title>
-        <b-card-body>
-            <b-form
-                @submit.prevent="onSubmit"
-                @input="onInput"
-            >
+    <general-contents-container page-title="Register">
+        <b-form
+            @submit.prevent="onSubmit"
+            @input="onInput"
+        >
+            <form-group
+                id="username"
+                v-model="form.username"
+                label="Username"
+                placeholder="Enter Username"
+                :required="true"
+            />
+            <b-row>
                 <form-group
-                    id="username"
-                    v-model="form.username"
-                    label="Username"
-                    placeholder="Enter Username"
+                    id="password"
+                    v-model="form.password"
+                    label="Password"
+                    placeholder="Enter password"
+                    type="password"
                     :required="true"
+                    class="col-lg-6 col-md-12"
                 />
-                <b-row>
-                    <form-group
-                        id="password"
-                        v-model="form.password"
-                        label="Password"
-                        placeholder="Enter password"
-                        type="password"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                    <form-group
-                        id="confirmPassword"
-                        v-model="form.password"
-                        label="Confirm Password"
-                        placeholder="Confirm Password"
-                        type="password"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                </b-row>
                 <form-group
-                    id="email"
-                    v-model="form.email"
-                    label="Email"
-                    placeholder="Enter email"
-                    type="email"
+                    id="confirmPassword"
+                    v-model="form.password"
+                    label="Confirm Password"
+                    placeholder="Confirm Password"
+                    type="password"
                     :required="true"
+                    class="col-lg-6 col-md-12"
                 />
-                <b-row>
-                    <form-group
-                        id="firstName"
-                        v-model="form.firstName"
-                        label="First Name"
-                        placeholder="Enter first name"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                    <form-group
-                        id="lastName"
-                        v-model="form.lastName"
-                        label="Last Name"
-                        placeholder="Enter last name"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                </b-row>
-                <b-button block type="submit" variant="primary">
-                    Register
-                </b-button>
-            </b-form>
-        </b-card-body>
-    </b-card>
+            </b-row>
+            <form-group
+                id="email"
+                v-model="form.email"
+                label="Email"
+                placeholder="Enter email"
+                type="email"
+                :required="true"
+            />
+            <b-row>
+                <form-group
+                    id="firstName"
+                    v-model="form.firstName"
+                    label="First Name"
+                    placeholder="Enter first name"
+                    :required="true"
+                    class="col-lg-6 col-md-12"
+                />
+                <form-group
+                    id="lastName"
+                    v-model="form.lastName"
+                    label="Last Name"
+                    placeholder="Enter last name"
+                    :required="true"
+                    class="col-lg-6 col-md-12"
+                />
+            </b-row>
+            <b-button block type="submit" variant="primary">
+                Register
+            </b-button>
+        </b-form>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "../components/PageHeader";
-import FormGroup from "../components/FormGroup";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
+import FormGroup from "@/components/FormGroup";
 
 export default {
     components: {
-        PageHeader,
+        GeneralContentsContainer,
         FormGroup
     },
     middleware: "auth",
@@ -147,7 +142,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-#registerCard{
-    padding: 20px;
-}
+
 </style>

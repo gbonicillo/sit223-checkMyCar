@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <page-header :page-title="car.make + ' ' + car.model" />
+    <general-contents-container :page-title="car.make + ' ' + car.model">
         <h2>Reports</h2>
         <b-table
             v-if="car.reports.length > 0"
@@ -14,18 +13,19 @@
         />
         <h2
             v-else
+            class="text-muted"
         >
-            There are no reports on this car yet
+            <em>There are no reports on this car yet</em>
         </h2>
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        GeneralContentsContainer
     },
     async asyncData ({ $axios, params }) {
         try {

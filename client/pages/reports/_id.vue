@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <page-header :page-title="'(' + report.type + ') ' + report.car + ': ' + report.title" />
+    <general-contents-container :page-title="'(' + report.type + ') ' + report.car + ': ' + report.title">
         <p class="text-muted">
             <em>Created: </em> {{ report.created_at }} ||
             <em>Last Updated: </em> {{ report.updated_at }} <br>
@@ -9,15 +8,15 @@
         <p>
             {{ report.description }}
         </p>
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        GeneralContentsContainer
     },
     async asyncData ({ $axios, params }) {
         try {

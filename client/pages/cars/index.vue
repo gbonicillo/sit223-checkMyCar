@@ -1,20 +1,15 @@
 <template>
-    <div>
-        <b-row align-v="center">
-            <b-col cols="8">
-                <page-header page-title="Cars" />
-            </b-col>
-            <b-col cols="4">
-                <b-button
-                    v-if="$auth.user.is_staff"
-                    variant="primary"
-                    class="float-right"
-                    to="/cars/add"
-                >
-                    Add Car
-                </b-button>
-            </b-col>
-        </b-row>
+    <general-contents-container page-title="Cars">
+        <template v-slot:header-extra>
+            <b-button
+                v-if="$auth.user.is_staff"
+                variant="primary"
+                class="float-right"
+                to="/cars/add"
+            >
+                Add Car
+            </b-button>
+        </template>
         <b-row>
             <b-table
                 striped
@@ -27,15 +22,15 @@
                 @row-clicked="onRowClick"
             />
         </b-row>
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        GeneralContentsContainer
     },
     async asyncData ({ $axios, params }) {
         try {

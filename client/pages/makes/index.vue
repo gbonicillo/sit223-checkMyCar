@@ -1,20 +1,15 @@
 <template>
-    <div>
-        <b-row align-v="center">
-            <b-col cols="8">
-                <page-header page-title="Makes" />
-            </b-col>
-            <b-col cols="4">
-                <b-button
-                    v-if="$auth.user.is_staff"
-                    variant="primary"
-                    class="float-right"
-                    to="/makes/add"
-                >
-                    Add Make
-                </b-button>
-            </b-col>
-        </b-row>
+    <general-contents-container page-title="Makes">
+        <template v-slot:header-extra>
+            <b-button
+                v-if="$auth.user.is_staff"
+                variant="primary"
+                class="float-right"
+                to="/makes/add"
+            >
+                Add Make
+            </b-button>
+        </template>
         <b-table
             striped
             hover
@@ -25,15 +20,15 @@
             :items="makes"
             @row-clicked="onRowClick"
         />
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        GeneralContentsContainer
     },
     async asyncData ({ $axios, params }) {
         try {

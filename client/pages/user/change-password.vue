@@ -1,60 +1,55 @@
 <template>
-    <b-card id="registerCard">
-        <b-card-title>
-            <page-header page-title="Change Password" />
-        </b-card-title>
-        <b-card-body>
-            <b-form
-                @submit.prevent="onSubmit"
-                @input="onInput"
-            >
-                <b-row>
-                    <form-group
-                        id="old-password"
-                        v-model="form.oldPassword"
-                        label="Old Password"
-                        placeholder="Enter password"
-                        type="password"
-                        :required="true"
-                        class="col-12"
-                    />
-                </b-row>
-                <b-row>
-                    <form-group
-                        id="password"
-                        v-model="form.password"
-                        label="Password"
-                        placeholder="Enter password"
-                        type="password"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                    <form-group
-                        id="confirmPassword"
-                        v-model="form.password"
-                        label="Confirm Password"
-                        placeholder="Confirm Password"
-                        type="password"
-                        :required="true"
-                        class="col-lg-6 col-md-12"
-                    />
-                </b-row>
-                <b-button block type="submit" variant="primary">
-                    Change Password
-                </b-button>
-            </b-form>
-        </b-card-body>
-    </b-card>
+    <general-contents-container page-title="Change Password">
+        <b-form
+            @submit.prevent="onSubmit"
+            @input="onInput"
+        >
+            <b-row>
+                <form-group
+                    id="old-password"
+                    v-model="form.oldPassword"
+                    label="Old Password"
+                    placeholder="Enter password"
+                    type="password"
+                    :required="true"
+                    class="col-12"
+                />
+            </b-row>
+            <b-row>
+                <form-group
+                    id="password"
+                    v-model="form.password"
+                    label="Password"
+                    placeholder="Enter password"
+                    type="password"
+                    :required="true"
+                    class="col-lg-6 col-md-12"
+                />
+                <form-group
+                    id="confirmPassword"
+                    v-model="form.password"
+                    label="Confirm Password"
+                    placeholder="Confirm Password"
+                    type="password"
+                    :required="true"
+                    class="col-lg-6 col-md-12"
+                />
+            </b-row>
+            <b-button block type="submit" variant="primary">
+                Change Password
+            </b-button>
+        </b-form>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
 import FormGroup from "@/components/FormGroup";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader,
-        FormGroup
+        FormGroup,
+        GeneralContentsContainer
     },
     middleware: "auth",
     data () {
@@ -105,7 +100,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-#registerCard{
-    padding: 20px;
-}
+
 </style>

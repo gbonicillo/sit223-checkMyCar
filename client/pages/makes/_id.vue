@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <page-header :page-title="make.name" />
+    <general-contents-container :page-title="make.name">
+        <h2>Models</h2>
         <b-table
             striped
             hover
@@ -9,15 +9,15 @@
             :items="make.cars"
             @row-clicked="onRowClick"
         />
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        GeneralContentsContainer
     },
     async asyncData ({ $axios, params }) {
         try {

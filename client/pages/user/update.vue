@@ -1,51 +1,49 @@
 <template>
-    <b-card id="registerCard">
-        <b-card-title>
-            <page-header page-title="Update User" />
-        </b-card-title>
-        <b-card-body>
-            <b-form
-                @submit.prevent="onSubmit"
-            >
+    <general-contents-container page-title="Update User Details">
+        <b-form
+            @submit.prevent="onSubmit"
+        >
+            <form-group
+                id="email"
+                v-model="form.email"
+                label="Email"
+                :placeholder="this.$auth.user.email"
+                type="email"
+            />
+            <b-row>
                 <form-group
-                    id="email"
-                    v-model="form.email"
-                    label="Email"
-                    :placeholder="this.$auth.user.email"
-                    type="email"
+                    id="firstName"
+                    v-model="form.firstName"
+                    label="First Name"
+                    :placeholder="this.$auth.user.first_name"
+                    :value="this.$auth.user.first_name"
+                    class="col-lg-6 col-md-12"
                 />
-                <b-row>
-                    <form-group
-                        id="firstName"
-                        v-model="form.firstName"
-                        label="First Name"
-                        :placeholder="this.$auth.user.first_name"
-                        :value="this.$auth.user.first_name"
-                        class="col-lg-6 col-md-12"
-                    />
-                    <form-group
-                        id="lastName"
-                        v-model="form.lastName"
-                        label="Last Name"
-                        :placeholder="this.$auth.user.last_name"
-                        class="col-lg-6 col-md-12"
-                    />
-                </b-row>
-                <b-button block type="submit" variant="primary">
-                    Update
-                </b-button>
-            </b-form>
-        </b-card-body>
-    </b-card>
+                <form-group
+                    id="lastName"
+                    v-model="form.lastName"
+                    label="Last Name"
+                    :placeholder="this.$auth.user.last_name"
+                    class="col-lg-6 col-md-12"
+                />
+            </b-row>
+            <b-button block type="submit" variant="primary">
+                Update
+            </b-button>
+        </b-form>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import FormGroup from "@/components/FormGroup";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader
+        FormGroup,
+        GeneralContentsContainer
     },
+
     middleware: "auth",
     data () {
         return {

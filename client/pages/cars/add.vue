@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <page-header page-title="Add Car" />
+    <general-contents-container page-title="Add Car">
         <b-form
             @submit.prevent="onSubmit"
         >
@@ -24,17 +23,17 @@
                 Add Car
             </b-button>
         </b-form>
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
 import FormGroup from "@/components/FormGroup";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     components: {
-        PageHeader,
-        FormGroup
+        FormGroup,
+        GeneralContentsContainer
     },
     middleware: ["auth", "is-staff"],
     async asyncData ({ $axios, params }) {

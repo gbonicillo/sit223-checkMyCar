@@ -1,23 +1,21 @@
 <template>
-    <div>
-        <page-header :page-title="this.$auth.user.username" />
-
+    <general-contents-container :page-title="this.$auth.user.username">
         <h2>Details</h2>
         <p>
             <b>Name:</b> {{ this.$auth.user.first_name + " " + this.$auth.user.last_name }}
             <br>
             <b>Email:</b> {{ this.$auth.user.email }}
         </p>
-    </div>
+    </general-contents-container>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
+import GeneralContentsContainer from "@/components/GeneralContentsContainer";
 
 export default {
     middleware: "auth",
     components: {
-        PageHeader
+        GeneralContentsContainer
     }
 };
 </script>
