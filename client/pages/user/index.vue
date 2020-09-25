@@ -15,6 +15,7 @@
 import PageHeader from "@/components/PageHeader";
 
 export default {
+    middleware: "auth",
     components: {
         PageHeader
     }
