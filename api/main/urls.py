@@ -10,7 +10,7 @@ urlpatterns = [
     path("makes/create", views.MakeCreate.as_view()),
     path("cars/", views.CarList.as_view()),
     path("cars/<int:pk>", views.CarDetail.as_view()),
-    path("cars/<int:pk>", views.CarUpdate.as_view()),
+    path("cars/<int:pk>/update", views.CarUpdate.as_view()),
     path("cars/create", views.CarCreate.as_view()),
     path("reports/", views.IssueList.as_view()),
     path("reports/<int:pk>", views.IssueDetail.as_view()),
