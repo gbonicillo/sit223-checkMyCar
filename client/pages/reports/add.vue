@@ -4,12 +4,21 @@
             @submit.prevent="onSubmit"
         >
             <form-group
+                id="make"
+                v-model="make"
+                label="Make"
+                :required="true"
+                form-type="select"
+                :options="makeOptions"
+            />
+
+            <form-group
                 id="car"
                 v-model="form.car"
                 label="Car"
                 :required="true"
                 form-type="select"
-                :options="makeOptions"
+                :options="carOptions"
             />
 
             <form-group
@@ -54,9 +63,11 @@ export default {
     middleware: ["auth", "is-staff"],
     async asyncData ({ $axios, params }) {
         try {
-            const cars = await $axios.$get("/api/cars/choices");
+            const cars = await $axios.$get("/api/cars/choices/1");
+            const makes = await $axios.$get("/api/makes/choices");
             return {
-                cars
+                cars,
+                makes
             };
         } catch (err) {
             return { cars: [] };
@@ -80,12 +91,13 @@ export default {
                     text: "Recall"
                 }
             ],
+            make: 1,
             cars: [],
             error: null
         };
     },
     computed: {
-        makeOptions () {
+        carOptions () {
             let options = [];
 
             this.cars.forEach((car, index) => {
@@ -100,6 +112,23 @@ export default {
             });
 
             return options;
+        },
+        makeOptions () {
+            const options = [];
+
+            this.makes.forEach((make, index) => {
+                options.push({
+                    value: make.id,
+                    text: make.name
+                });
+            });
+
+            return options;
+        }
+    },
+    watch: {
+        make (value) {
+            this.fetchCars();
         }
     },
     methods: {
@@ -124,6 +153,14 @@ export default {
                         $("#title")[0].setCustomValidity(this.error);
                     }
                 });
+        },
+        async fetchCars () {
+            try {
+                const cars = await this.$axios.$get(`/api/cars/choices/${this.make}`);
+                this.cars = cars;
+            } catch (err) {
+                this.cars = [];
+            }
         }
     }
 };

@@ -67,9 +67,14 @@ class CarList(generics.ListAPIView):
     search_fields = filter_fields
 
 class CarChoices(generics.ListAPIView):
-    queryset = Car.objects.all().order_by("model", "make")
     serializer_class = CarListSerializer
     pagination_class = None
+
+    def get_queryset(self):
+        make_id = self.kwargs.get("make_pk")
+        cars = Car.objects.filter(make=make_id).order_by("model")
+        return cars
+    
 
 class CarDetail(generics.RetrieveDestroyAPIView):
     queryset = Car.objects.all()
