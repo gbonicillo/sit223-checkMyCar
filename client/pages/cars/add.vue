@@ -38,7 +38,7 @@ export default {
     middleware: ["auth", "is-staff"],
     async asyncData ({ $axios, params }) {
         try {
-            const makes = await $axios.$get("/api/makes/");
+            const makes = await $axios.$get("/api/makes/choices");
             return {
                 makes
             };

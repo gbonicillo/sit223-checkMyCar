@@ -54,7 +54,7 @@ export default {
     middleware: ["auth", "is-staff"],
     async asyncData ({ $axios, params }) {
         try {
-            const cars = await $axios.$get("/api/cars/");
+            const cars = await $axios.$get("/api/cars/choices");
             return {
                 cars
             };
