@@ -4,7 +4,7 @@
             <b-button
                 v-if="$auth.user.is_staff"
                 variant="primary"
-                class="float-right"
+                class="float-lg-right float-sm-left"
                 to="/cars/add"
             >
                 Add Car
@@ -20,6 +20,13 @@
                 :fields="fields"
                 :items="cars"
                 @row-clicked="onRowClick"
+            />
+        </b-row>
+        <b-row align-h="center">
+            <b-pagination
+                v-model="curPage"
+                :total-rows="contentCount"
+                :per-page="perPage"
             />
         </b-row>
     </general-contents-container>
@@ -57,8 +64,17 @@ export default {
                     sortable: true
                 }
             ],
+            perPage: process.env.paginationItemsPerPage,
+            curPage: 1,
             cars: []
         };
+    },
+    watch: {
+        curPage: {
+            handler (value) {
+                this.fetchPage();
+            }
+        }
     },
     methods: {
         onRowClick (record, index) {
@@ -67,6 +83,18 @@ export default {
             this.$router.push({
                 path: `/cars/${carId}`
             });
+        },
+        async fetchPage () {
+            try {
+                const result = await this.$axios.$get(`/api/cars/?page=${this.curPage}`);
+                this.cars = result.results;
+                this.nextPage = result.next;
+                this.prevPage = result.previous;
+            } catch (err) {
+                this.$toasted.global.defaultError({
+                    msg: err
+                });
+            }
         }
     }
 };

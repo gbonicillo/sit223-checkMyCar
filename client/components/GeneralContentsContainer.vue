@@ -5,10 +5,10 @@
                 <b-row
                     align-v="center"
                 >
-                    <b-col md="12" lg="8">
+                    <b-col sm="12" lg="8">
                         <page-header :page-title="pageTitle" />
                     </b-col>
-                    <b-col md="12" lg="4">
+                    <b-col sm="12" lg="4">
                         <slot name="header-extra" />
                     </b-col>
                 </b-row>

@@ -130,5 +130,8 @@ export default {
                 }
             }
         ]
+    },
+    env: {
+        paginationItemsPerPage: 10
     }
 };
