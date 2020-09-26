@@ -13,9 +13,16 @@
             selectable
             borderless
             :fields="fields"
-            :items="make.cars"
+            :items="cars"
             @row-clicked="onRowClick"
         />
+        <b-row align-h="center">
+            <b-pagination
+                v-model="curPage"
+                :total-rows="contentCount"
+                :per-page="perPage"
+            />
+        </b-row>
     </general-contents-container>
 </template>
 
@@ -30,7 +37,9 @@ export default {
         try {
             const make = await $axios.$get(`/api/makes/${params.id}`);
             return {
-                make
+                make,
+                cars: make.cars.contents,
+                contentCount: make.cars.count
             };
         } catch (err) {
             error({ statusCode: 404, message: "Make not found" });
@@ -39,12 +48,21 @@ export default {
     data () {
         return {
             fields: ["model"],
+            perPage: process.env.paginationItemsPerPage,
+            curPage: 1,
             make: {
                 id: 0,
-                name: "",
-                cars: []
-            }
+                name: ""
+            },
+            cars: []
         };
+    },
+    watch: {
+        curPage: {
+            handler (value) {
+                this.fetchPage();
+            }
+        }
     },
     methods: {
         onRowClick (record, index) {
@@ -68,6 +86,18 @@ export default {
                             msg: err
                         });
                     });
+            }
+        },
+        async fetchPage () {
+            try {
+                const result = await this.$axios.$get(`/api/makes/${this.make.id}?page=${this.curPage}`);
+                this.cars = result.cars.contents;
+                this.nextPage = result.next;
+                this.prevPage = result.previous;
+            } catch (err) {
+                this.$toasted.global.defaultError({
+                    msg: err
+                });
             }
         }
     }

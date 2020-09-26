@@ -1,5 +1,5 @@
 from django.http import HttpResponseBadRequest
-from rest_framework import serializers
+from rest_framework import serializers, pagination
 from .models import Make, Car, Issue
 from api.settings import EMAIL_HOST_USER
 from django.contrib.auth import get_user_model
@@ -134,8 +134,9 @@ class IssueCreateSerializer (serializers.ModelSerializer):
         return instance
 
 class MakeSerializer (serializers.ModelSerializer): 
-    cars = CarMakeDetailSerializer(many=True)
-   
+    # cars = CarMakeDetailSerializer(many=True)
+    cars = serializers.SerializerMethodField("paginated_cars")
+
     class Meta:
         ordering = ["name"]
         model = Make
@@ -144,6 +145,17 @@ class MakeSerializer (serializers.ModelSerializer):
             "name",
             "cars"
         ]
+    
+    def paginated_cars(self, obj):
+        cars = Car.objects.filter(make=obj).order_by("model")
+        count = len(cars)
+        paginator = pagination.PageNumberPagination()
+        page = paginator.paginate_queryset(cars, self.context["request"])
+        serializer = CarListSerializer(page, many=True, context={"request": self.context["request"]})
+        return {
+            "count": count,
+            "contents": serializer.data
+        }
 
 class MakeListSerializer (serializers.ModelSerializer):
     class Meta:
