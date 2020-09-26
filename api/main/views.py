@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 import json
 
 User = get_user_model()
@@ -25,6 +27,12 @@ class MakeCreate(generics.CreateAPIView):
 class MakeList(generics.ListAPIView):
     queryset = Make.objects.all().order_by('name')
     serializer_class = MakeListSerializer
+    filter_backends = [
+        filters.SearchFilter
+    ]
+    search_fields = [
+        "name"
+    ]
 
 class MakeChoices(generics.ListAPIView):
     queryset = Make.objects.all().order_by('name')
@@ -48,6 +56,15 @@ class CarCreate(generics.CreateAPIView):
 class CarList(generics.ListAPIView):
     queryset = Car.objects.all().order_by("model", "make")
     serializer_class = CarListSerializer
+    filter_backends = [
+        filters.SearchFilter,
+        DjangoFilterBackend
+    ]
+    filter_fields = [
+        "make__name",
+        "model"
+    ]
+    search_fields = filter_fields
 
 class CarChoices(generics.ListAPIView):
     queryset = Car.objects.all().order_by("model", "make")
@@ -155,6 +172,15 @@ class IssueCreate(generics.CreateAPIView):
 class IssueList(generics.ListAPIView):
     queryset = Issue.objects.all().order_by("-created_at")
     serializer_class = IssueSerializer
+    filter_backends = [
+        filters.SearchFilter,
+        DjangoFilterBackend
+    ]
+    filter_fields = [
+        "car__model",
+        "car__make__name"
+    ]
+    search_fields = filter_fields
 
 class IssueDetail(generics.RetrieveDestroyAPIView):
     queryset = Issue.objects.all()
