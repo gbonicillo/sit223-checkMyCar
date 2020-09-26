@@ -5,10 +5,12 @@ from . import views
 
 urlpatterns = [
     path("makes/", views.MakeList.as_view()),
+    path("makes/choices", views.MakeChoices.as_view()),
     path("makes/<int:pk>", views.MakeDetail.as_view()),
     path("makes/<int:pk>/update", views.MakeUpdate.as_view()),
     path("makes/create", views.MakeCreate.as_view()),
     path("cars/", views.CarList.as_view()),
+    path("cars/choices", views.CarChoices.as_view()),
     path("cars/<int:pk>", views.CarDetail.as_view()),
     path("cars/<int:pk>/update", views.CarUpdate.as_view()),
     path("cars/<int:pk>/owner", views.CarOwner.as_view()),

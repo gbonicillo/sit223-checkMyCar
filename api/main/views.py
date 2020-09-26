@@ -26,6 +26,11 @@ class MakeList(generics.ListAPIView):
     queryset = Make.objects.all().order_by('name')
     serializer_class = MakeListSerializer
 
+class MakeChoices(generics.ListAPIView):
+    queryset = Make.objects.all().order_by('name')
+    serializer_class = MakeListSerializer
+    pagination_class = None
+
 class MakeDetail(generics.RetrieveDestroyAPIView):
     queryset = Make.objects.all()
     serializer_class = MakeSerializer
@@ -44,6 +49,10 @@ class CarList(generics.ListAPIView):
     queryset = Car.objects.all().order_by("model", "make")
     serializer_class = CarListSerializer
 
+class CarChoices(generics.ListAPIView):
+    queryset = Car.objects.all().order_by("model", "make")
+    serializer_class = CarListSerializer
+    pagination_class = None
 
 class CarDetail(generics.RetrieveDestroyAPIView):
     queryset = Car.objects.all()
