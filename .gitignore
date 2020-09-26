@@ -143,3 +143,8 @@ cython_debug/
 .VSCodeCounter/2020-09-26_13-29-01/results.csv
 .VSCodeCounter/2020-09-26_13-29-01/results.md
 .VSCodeCounter/2020-09-26_13-29-01/results.txt
+scripts/car_model_list.json
+scripts/car_seed.json
+scripts/cars_init.json
+scripts/create_car_db_seed.py
+scripts/make_seed.json
