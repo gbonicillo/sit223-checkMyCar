@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'django_seed',
     'main.apps.MainConfig',
     'user_unique_email'
 ]
@@ -79,14 +80,24 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# MySQL Database default setup
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'checkMyCar',
+#         'USER': 'sit223',
+#         'PASSWORD': 'checkMyC@rSIT223',
+#         'HOST': 'localhost',
+#         'PORT': '3306'
+#     }
+# }
+
+# SQLite Database setup 
+# WARNING: PURELY FOR DEVELOPMENT SETUP ONLY
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'checkMyCar',
-        'USER': 'sit223',
-        'PASSWORD': 'checkMyC@rSIT223',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'ENGINE' : 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
 
