@@ -11,6 +11,7 @@
             </b-button>
         </template>
         <b-table
+            v-if="reports.length > 0"
             striped
             hover
             selectable
@@ -37,10 +38,14 @@ export default {
     components: {
         GeneralContentsContainer
     },
-    async asyncData ({ $axios, params }) {
+    watchQuery: ["search"],
+    async asyncData ({ $axios, params, route }) {
         try {
-            const result = await $axios.$get("/api/reports/");
+            let search = route.query.search || "";
+            search = search.length > 0 ? `?search=${search}` : "";
+            const result = await $axios.$get(`/api/reports/${search}`);
             return {
+                search,
                 reports: result.results,
                 contentCount: result.count,
                 nextPage: result.next,
@@ -84,6 +89,9 @@ export default {
             }
         }
     },
+    created () {
+        this.fetchPage();
+    },
     methods: {
         onRowClick (record, index) {
             const reportId = this.reports[index].id;
@@ -94,7 +102,8 @@ export default {
         },
         async fetchPage () {
             try {
-                const result = await this.$axios.$get(`/api/reports/?page=${this.curPage}`);
+                const params = this.search.length > 0 ? `${this.search}&` : "?";
+                const result = await this.$axios.$get(`/api/reports/${params}page=${this.curPage}`);
                 this.reports = result.results;
                 this.nextPage = result.next;
                 this.prevPage = result.previous;

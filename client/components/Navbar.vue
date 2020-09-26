@@ -4,6 +4,28 @@
         <b-navbar-brand to="/">
             Check Your Car
         </b-navbar-brand>
+
+        <b-navbar-nav
+            v-if="this.$auth.loggedIn"
+        >
+            <b-nav-form>
+                <b-form-input
+                    v-model="searchTerm"
+                    size="sm"
+                    class="mr-sm-2"
+                    placeholder="Seach Reports"
+                />
+                <b-button
+                    size="sm"
+                    class="my-2 my-sm-0"
+                    variant="primary"
+                    @click="onSearch"
+                >
+                    Search
+                </b-button>
+            </b-nav-form>
+        </b-navbar-nav>
+
         <b-collapse id="nav_collapse" is-nav>
             <b-navbar-nav>
                 <b-nav-item
@@ -14,7 +36,6 @@
                     {{ item.title }}
                 </b-nav-item>
             </b-navbar-nav>
-
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown
                     v-if="this.$auth.loggedIn"
@@ -39,6 +60,7 @@
 export default {
     data () {
         return {
+            searchTerm: "",
             globalItems: [
                 {
                     title: "Home",
@@ -109,6 +131,19 @@ export default {
                 }
             ]
         };
+    },
+    methods: {
+        onSearch (evt) {
+            if (this.searchTerm.length > 0) {
+                this.$router.push({
+                    path: `/reports/?search=${this.searchTerm}`
+                });
+            } else {
+                this.$router.push({
+                    path: "/reports/"
+                });
+            }
+        }
     }
 };
 </script>
