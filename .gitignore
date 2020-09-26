@@ -148,3 +148,4 @@ scripts/car_seed.json
 scripts/cars_init.json
 scripts/create_car_db_seed.py
 scripts/make_seed.json
+scripts/issues_init.json
