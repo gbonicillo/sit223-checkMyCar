@@ -24,14 +24,14 @@
         </template>
         <h2>Reports</h2>
         <b-table
-            v-if="car.reports.length > 0"
+            v-if="reports.length > 0"
             striped
             hover
             selectable
             responsive
             borderless
             :fields="report_fields"
-            :items="car.reports"
+            :items="reports"
             @row-clicked="onRowClick"
         />
         <h2
@@ -58,6 +58,8 @@ export default {
             const isOwner = await $axios.$get(`/api/cars/${params.id}/owner`);
             return {
                 car,
+                reports: car.reports.contents,
+                contentCount: car.reports.count,
                 isOwner: isOwner.is_owner
             };
         } catch (err) {
@@ -66,6 +68,8 @@ export default {
     },
     data () {
         return {
+            perPage: process.env.paginationItemsPerPage,
+            curPage: 1,
             car: {
                 id: 0,
                 make: "",
@@ -94,6 +98,13 @@ export default {
                 }
             ]
         };
+    },
+    watch: {
+        curPage: {
+            handler (value) {
+                this.fetchPage();
+            }
+        }
     },
     methods: {
         onRowClick (record, index) {
@@ -151,7 +162,18 @@ export default {
                         });
                     });
             }
+        },
+        async fetchPage () {
+            try {
+                const result = await this.$axios.$get(`/api/cars/${this.make.id}?page=${this.curPage}`);
+                this.reports = result.reports.contents;
+            } catch (err) {
+                this.$toasted.global.defaultError({
+                    msg: err
+                });
+            }
         }
+
     }
 };
 </script>

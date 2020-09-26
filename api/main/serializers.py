@@ -36,7 +36,7 @@ class IssueSerializer (serializers.ModelSerializer):
 
 class CarSerializer (serializers.ModelSerializer):
     make = serializers.StringRelatedField()
-    reports = IssueSerializer(many=True)
+    reports = serializers.SerializerMethodField("paginated_reports")
 
     class Meta:
         model = Car
@@ -46,6 +46,19 @@ class CarSerializer (serializers.ModelSerializer):
             "model",
             "reports"
         ]
+
+    def paginated_reports(self, obj):
+        reports = Issue.objects.filter(car=obj).order_by("updated_at")
+        count = len(reports)
+        paginator = pagination.PageNumberPagination()
+        page = paginator.paginate_queryset(reports, self.context["request"])
+        serializer = IssueSerializer(page, many=True, context={"request": self.context["request"]})
+        return {
+            "count": count,
+            "contents": serializer.data
+        }
+
+
 
 class CarListSerializer (serializers.ModelSerializer):
     make = serializers.StringRelatedField()
@@ -134,7 +147,6 @@ class IssueCreateSerializer (serializers.ModelSerializer):
         return instance
 
 class MakeSerializer (serializers.ModelSerializer): 
-    # cars = CarMakeDetailSerializer(many=True)
     cars = serializers.SerializerMethodField("paginated_cars")
 
     class Meta:

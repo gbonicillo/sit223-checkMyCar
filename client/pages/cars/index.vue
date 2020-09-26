@@ -11,7 +11,25 @@
             </b-button>
         </template>
         <b-row>
+            <b-input-group>
+                <b-form-input
+                    v-model="searchTerm"
+                    placeholder="Search Cars"
+                    @keyup.enter="onSearch"
+                />
+                <b-input-group-append>
+                    <b-button
+                        variant="primary"
+                        @click="onSearch"
+                    >
+                        Search
+                    </b-button>
+                </b-input-group-append>
+            </b-input-group>
+        </b-row>
+        <b-row>
             <b-table
+                v-if="cars.length > 0"
                 striped
                 hover
                 selectable
@@ -21,6 +39,12 @@
                 :items="cars"
                 @row-clicked="onRowClick"
             />
+            <h2
+                v-else
+                class="text-muted"
+            >
+                <em>There are no cars found using search term "{{ lastSearchTerm }}"</em>
+            </h2>
         </b-row>
         <b-row align-h="center">
             <b-pagination
@@ -66,7 +90,9 @@ export default {
             ],
             perPage: process.env.paginationItemsPerPage,
             curPage: 1,
-            cars: []
+            cars: [],
+            searchTerm: "",
+            lastSearchTerm: ""
         };
     },
     watch: {
@@ -90,6 +116,23 @@ export default {
                 this.cars = result.results;
                 this.nextPage = result.next;
                 this.prevPage = result.previous;
+            } catch (err) {
+                this.$toasted.global.defaultError({
+                    msg: err
+                });
+            }
+        },
+        async onSearch (evt) {
+            let searchUrl = "/api/cars/";
+            searchUrl = this.searchTerm.length > 0 ? `${searchUrl}?search=${this.searchTerm}` : searchUrl;
+            try {
+                const result = await this.$axios.$get(searchUrl);
+                this.cars = result.results;
+                this.next = result.next;
+                this.prevPage = result.previous;
+                this.contentCount = result.count;
+
+                this.lastSearchTerm = this.searchTerm;
             } catch (err) {
                 this.$toasted.global.defaultError({
                     msg: err
