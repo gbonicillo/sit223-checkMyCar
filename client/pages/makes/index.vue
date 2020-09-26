@@ -32,9 +32,12 @@ export default {
     },
     async asyncData ({ $axios, params }) {
         try {
-            const makes = await $axios.$get("/api/makes/");
+            const result = await $axios.$get("/api/makes/");
             return {
-                makes
+                makes: result.results,
+                contentCount: result.count,
+                nextPage: result.next,
+                prevPage: result.previous
             };
         } catch (err) {
             return { makes: [] };

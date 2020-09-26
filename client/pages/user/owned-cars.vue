@@ -26,7 +26,10 @@ export default {
         try {
             const result = await $axios.$get(`/api/users/${$auth.user.id}/owned-cars`);
             return {
-                cars: result.cars
+                cars: result.results,
+                contentCount: result.count,
+                nextPage: result.next,
+                prevPage: result.previous
             };
         } catch (err) {
             return { cars: [] };

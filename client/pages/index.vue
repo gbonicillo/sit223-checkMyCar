@@ -18,9 +18,12 @@
 export default {
     async asyncData ({ $axios, params }) {
         try {
-            const cars = await $axios.$get("/api/cars/");
+            const result = await $axios.$get("/api/cars/");
             return {
-                cars
+                cars: result.results,
+                contentCount: result.count,
+                nextPage: result.next,
+                prevPage: result.previous
             };
         } catch (err) {
             return { cars: [] };

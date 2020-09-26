@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.renderers import JSONRenderer
+from rest_framework.pagination import PageNumberPagination
 import json
 
 User = get_user_model()
@@ -96,6 +97,28 @@ class CarOwner(APIView):
 
 class UserOwnedCars(APIView):
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    serializer_class = CarListSerializer
+
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+    
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+    
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
 
     def get_object(self, pk):
         try:
@@ -106,12 +129,13 @@ class UserOwnedCars(APIView):
     def get(self, request, pk, format=None):
         user = self.get_object(pk)
         cars = Car.objects.filter(owners__id=pk)
-        car_data = [ CarListSerializer(car).data for car in cars ]
-        content = {
-            "cars": car_data
-        }
+        page = self.paginate_queryset(cars)
+        serializer = self.serializer_class(cars, many=True)
 
-        return Response(content)
+        if page is not None:
+            serializer = self.get_paginated_response(serializer.data)
+
+        return Response(serializer.data)
 
 
 class IssueCreate(generics.CreateAPIView):
