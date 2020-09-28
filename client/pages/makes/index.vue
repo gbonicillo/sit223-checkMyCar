@@ -103,7 +103,7 @@ export default {
         },
         async fetchPage () {
             try {
-                const result = await this.$axios.$get(`/api/reports/?page=${this.curPage}`);
+                const result = await this.$axios.$get(`/api/makes/?page=${this.curPage}`);
                 this.reports = result.results;
                 this.nextPage = result.next;
                 this.prevPage = result.previous;
