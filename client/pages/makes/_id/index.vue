@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         onRowClick (record, index) {
-            const carId = this.make.cars[index].id;
+            const carId = this.cars[index].id;
 
             this.$router.push({
                 path: `/cars/${carId}`
