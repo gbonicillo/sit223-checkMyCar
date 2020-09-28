@@ -23,7 +23,6 @@
                 />
                 <form-group
                     id="confirmPassword"
-                    v-model="form.password"
                     label="Confirm Password"
                     placeholder="Confirm Password"
                     type="password"
@@ -91,6 +90,9 @@ export default {
     },
     methods: {
         async onSubmit (evt) {
+            // For some reason Nuxt attaches an Auth header for this
+            // Django rest framework jwt doesn't like it
+            this.$axios.setHeader("Authorization", "");
             await this.$axios.post("/api/auth/register", {
                 username: this.form.username,
                 password: this.form.password,
@@ -119,6 +121,10 @@ export default {
                     } else if (err.response.data.email) {
                         this.error = err.response.data.email;
                         $("#email")[0].setCustomValidity(this.error);
+                    } else {
+                        this.$toasted.global.defaultError({
+                            msg: err.response.data.detail
+                        });
                     }
                 });
         },

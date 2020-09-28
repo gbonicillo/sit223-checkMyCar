@@ -19,10 +19,10 @@
             :options="options"
         />
         <b-form-textarea
-            class="input-area"
             v-if="formType === 'textarea'"
             :id="id"
             v-model="dataModel"
+            class="input-area"
             :type="type"
             :required="required ? true : false"
             :placeholder="placeholder"

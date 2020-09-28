@@ -83,7 +83,7 @@ export default {
             local: {
                 endpoints: {
                     login: {
-                        url: "/api/token/",
+                        url: "/api/auth/token",
                         method: "post",
                         propertyName: "access",
                         altProperty: "refresh"
