@@ -1,17 +1,19 @@
 <template>
-    <b-container>
+    <general-contents-container>
         <b-row>
-            <div
-                v-for="car in cars"
-                :key="car.id"
-                class="col-lg-4 col-md-6 mb-3 mt-3"
+            <b-jumbotron
+                class="w-100"
+                header="Welcome to Check my Car!"
+                lead="The site for checking reported issues and recalls for cars!"
+                bg-variant="dark"
+                text-variant="light"
             >
-                <b-card
-                    :title="car.make + ' ' + car.model"
-                />
-            </div>
+                <p>
+                    Try searching report for your car by typing your car's make and/or model in the search bar
+                </p>
+            </b-jumbotron>
         </b-row>
-    </b-container>
+    </general-contents-container>
 </template>
 
 <script>
@@ -36,7 +38,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
