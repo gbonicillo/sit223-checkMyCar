@@ -19,6 +19,7 @@
             :options="options"
         />
         <b-form-textarea
+            class="input-area"
             v-if="formType === 'textarea'"
             :id="id"
             v-model="dataModel"
@@ -77,3 +78,11 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+
+.input-area {
+    height: 150px
+}
+
+</style>
